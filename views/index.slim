@@ -1,0 +1,9 @@
+h1 Welcome 
+- if session[:username] != nil && 0
+    h1 #{session[:username]}
+    a href="/posts" Community
+    a href="/profile" Profile
+-  else
+    a href="/login" Log in
+    a href="/reg" Register
+    a href="/posts" Community
