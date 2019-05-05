@@ -21,6 +21,19 @@ get('/profile') do
     slim(:profile)
 end
 
+get('/ped') do
+    slim(:ped)
+end
+
+get('/logout') do
+    slim(:logout)
+end
+
+post('/logout') do
+    session[:username] = nil
+redirect('/')
+end
+
 get('/reg') do
     slim(:reg)
 end
@@ -59,6 +72,33 @@ post('/login') do
     else
         redirect("/login")
     end
+
+end
+
+
+post('/ped') do
+    db = SQLite3::Database.new("db/database.db")
+    db.results_as_hash = true
+
+    newname = params["cunam"]
+    newpas = BCrypt::Password.create(params["cpass"])
+    ah = session[:username]
+
+    result = db.execute("UPDATE users SET user_name = ?, hash_pass = ? WHERE user_name = ?", [newname, newpas, ah])
+    redirect('/profile')
+end
+
+post('/delete') do
+    db = SQLite3::Database.new("db/database.db")
+    db.results_as_hash = true
+
+    nam = session[:username]
+
+    result = db.execute("DELETE FROM users WHERE user_name = ?", nam)
+
+    session[:username] = nil
+
+    redirect('/')
 end
 
 get('/cpost') do

@@ -1,4 +1,11 @@
 h1 Profile
-h2 Welcome #{session[:createlogin]} user #{session[:username]}
+h2 Welcome #{session[:username]}
 
 a href="/posts" Community
+a href="/ped" Edit profile
+
+form action="/logout" method="POST"
+    input type="Submit" value="Log out"  
+
+form action="delete" method="POST"
+    input type="Submit" value="Delete profile" 
