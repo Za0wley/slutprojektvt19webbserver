@@ -12,9 +12,9 @@ get('/posts') do
     db = SQLite3::Database.new("db/database.db")
     db.results_as_hash = true
 
-    @show = db.execute("SELECT title, content FROM posts").to_s
-    @show.gsub!(/[""(){}>]/,'')
-    slim :posts
+    show = db.execute("SELECT title, content FROM posts")
+    #show.gsub!(/[""(){}>]/,'')
+    slim(:posts, locals:{show:show})
 end
 
 get('/profile') do
@@ -68,11 +68,13 @@ post('/login') do
 
         session[:createlogin] = "login"
         session[:username] = username
+        session[:id] = db.execute("SELECT userid FROM users WHERE user_name = ?", session[:username])
+        idak = session[:id].first["userid"].to_i
         redirect("/")
     else
         redirect("/login")
     end
-
+    
 end
 
 
@@ -111,9 +113,8 @@ post('/cpost') do
     
     titl = params["title"]
     msg = params["content"]
-
-    db.execute("INSERT INTO posts (title, content) VALUES(?, ?)", [titl, msg])
-    db.execute("SELECT posts.userid, users.user_name FROM posts INNER JOIN users ON posts.userid = users.userid")
+    ida = session[:id].first["userid"].to_i
+    db.execute("INSERT INTO posts(userid, title, content) VALUES(?, ?, ?)", ida, titl, msg)
 redirect('/')
 end
 

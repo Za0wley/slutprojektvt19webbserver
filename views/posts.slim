@@ -3,6 +3,11 @@ h2 Read all posts below
 
 a href="/cpost" Create a post
 
-div #{@show}
+- show.each do |x|
+    p
+        h2 #{x["title"]}
+        p #{x["content"]}
+
+
 
 
